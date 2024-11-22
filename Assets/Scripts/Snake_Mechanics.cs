@@ -32,6 +32,9 @@ public class Snake_Mechanics : MonoBehaviour
     {
         gameOverPanel.SetActive(false);
         snakeHead = this.GetComponent<Transform>();
+        // speed = Mathf.Abs(PlayerPrefs.GetInt("SnakeSpeed") - 5) / 10.0f;
+        // Debug.Log(speed);
+        // speed = 0.02f;
         Time.fixedDeltaTime = speed; // 0 is the default frame rendering time and if we increase the time, the time for rendering will increase hence laggy and slow expereience
 
         bound = grid.bounds;
@@ -127,7 +130,7 @@ public class Snake_Mechanics : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        SceneManager.LoadScene("Gameplay");
+        SceneManager.LoadScene("Level1");
     }
 
     // food prefab is tagged as obstacle because we'll be adding a prefab to snake body which will be obstacle for snake itself, and we've just one food instance tagged food, which we'll use as actuall prefab
