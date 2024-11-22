@@ -14,9 +14,6 @@ public class TypewriterEffect : MonoBehaviour
 
     private string part1Text, part2Text;
 
-    public Slider left;
-    public Slider right;
-
 
     void Start()
     {
@@ -47,17 +44,5 @@ public class TypewriterEffect : MonoBehaviour
             // Wait for the loop delay
             yield return new WaitForSeconds(loopDelay);
         }while(shouldLoop);
-    }
-
-    public void buttonClick(){
-        Debug.Log("Button Clicked");
-    }
-
-    public void leftSlider(){
-        right.value = left.value;
-    }
-
-    public void rightSlider(){
-        left.value = right.value;
     }
 }

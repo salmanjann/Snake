@@ -14,7 +14,6 @@ public class MainMenu : MonoBehaviour
     public Slider leftSlider;
     public Slider rightSlider;
     private int volume;
-    public AudioSource audioSource;
     public TextMeshProUGUI volumeValue;
 
     // Snake Speed
@@ -29,14 +28,13 @@ public class MainMenu : MonoBehaviour
     public Image soundOnRight;
     public Image soundOffRight;
     private bool muted = false;
-    
 
     private void Start()
     {
         volume = PlayerPrefs.GetInt("Volume");
         leftSlider.value = volume;
         rightSlider.value = volume;
-        audioSource.volume = volume / 10.0f;
+        BackgroundMusic.audioSource.volume = volume / 10.0f;
         volumeValue.text = volume.ToString();
 
         // Snake Speed
@@ -46,17 +44,22 @@ public class MainMenu : MonoBehaviour
         snakeSpeed.text = speed.ToString();
 
         // Sound on/off
-        if(!PlayerPrefs.HasKey("muted")){
-            PlayerPrefs.SetInt("muted",0);
+        if (!PlayerPrefs.HasKey("muted"))
+        {
+            PlayerPrefs.SetInt("muted", 0);
             LoadSound();
         }
-        else{
+        else
+        {
             LoadSound();
         }
-        if(muted)
-            audioSource.Pause();
-        else    
-            audioSource.Play();
+        if (muted)
+            BackgroundMusic.audioSource.Pause();
+        else
+        {
+            if (!BackgroundMusic.audioSource.isPlaying)
+                BackgroundMusic.audioSource.Play();
+        }
         SoundIconChange();
     }
 
@@ -86,7 +89,7 @@ public class MainMenu : MonoBehaviour
     {
         volume = (int)rightSlider.value;
         PlayerPrefs.SetInt("Volume", volume);
-        audioSource.volume = volume / 10.0f;
+        BackgroundMusic.audioSource.volume = volume / 10.0f;
         volumeValue.text = volume.ToString();
     }
 
@@ -110,42 +113,67 @@ public class MainMenu : MonoBehaviour
     }
 
     // Sound on/off
-    public void SoundOn_Off(){
-        if(!muted){
+    public void SoundOn_Off()
+    {
+        if (!muted)
+        {
             muted = true;
-            audioSource.Pause();
+            BackgroundMusic.audioSource.Pause();
         }
-        else{
+        else
+        {
             muted = false;
-            audioSource.Play();
+            if (!BackgroundMusic.audioSource.isPlaying)
+                BackgroundMusic.audioSource.Play();
         }
         SaveSound();
         SoundIconChange();
     }
 
-    private void SoundIconChange(){
-        if(muted){
+    private void SoundIconChange()
+    {
+        if (muted)
+        {
             soundOnLeft.enabled = true;
             soundOffLeft.enabled = false;
             soundOnRight.enabled = true;
             soundOffRight.enabled = false;
         }
-        else{
+        else
+        {
             soundOnLeft.enabled = false;
             soundOffLeft.enabled = true;
             soundOnRight.enabled = false;
             soundOffRight.enabled = true;
         }
     }
-    private void LoadSound(){
+    private void LoadSound()
+    {
         muted = PlayerPrefs.GetInt("muted") == 1;
     }
 
-    private void SaveSound(){
-        PlayerPrefs.SetInt("muted",muted ? 1: 0);
+    private void SaveSound()
+    {
+        PlayerPrefs.SetInt("muted", muted ? 1 : 0);
     }
 
-    public void StartLevel1(){
+    public void StartLevel1()
+    {
         SceneManager.LoadScene("Level1");
+    }
+    public void StartLevel2()
+    {
+        SceneManager.LoadScene("Level 2");
+    }
+
+    public void BackToMenu()
+    {
+        settingsPanel.SetActive(false);
+        levelSelectionPanel.SetActive(false);
+    }
+
+    public void ResetScore()
+    {
+        PlayerPrefs.SetInt("HighScore", 0);
     }
 }

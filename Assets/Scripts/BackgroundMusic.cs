@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class BackgroundMusic : MonoBehaviour
 {
-    private static BackgroundMusic backgroundMusic;
+    public static BackgroundMusic Instance; // Singleton reference
+    public static AudioSource audioSource; // Static reference for easy access
+    public AudioSource audioSourceInstance;
 
-    private void Awake() {
-        if(backgroundMusic == null){
-            backgroundMusic = this;
-            DontDestroyOnLoad(backgroundMusic);
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this; // Set the static instance
+            audioSource = audioSourceInstance; // Assign the AudioSource reference
+            DontDestroyOnLoad(gameObject); // Persist this GameObject across scenes
         }
-        else{
-            Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject); // Destroy any duplicate instances
+            return;
         }
     }
 }

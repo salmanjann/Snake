@@ -8,31 +8,21 @@ using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UIElements;
 
 
-// Size iniital
-// Snake died, pause and replay
-// 
-public class Snake_Mechanics : MonoBehaviour
+public class SnakeMechanicsBlack : MonoBehaviour
 {
     public Transform snakeHead;
     private Vector2 direction = Vector2.right; // (0,1)
     public float speed = 0.1f;
-    public Collider2D grid;
-    public Bounds bound;// store the area between collider
-
-    public Transform foodBlack;
-    public Transform foodWhite;
 
     private List<Transform> snakeBody = new List<Transform>();
     public Transform snakeBodyPart;
 
     public int size = 5;
-
-    private int score = 0;
-
-    public GameplayUI gameplayUIRef;
     private bool isGameOver = false;
     public PortalHandler portalHandlerRef;
-    private void Awake() {
+
+    private void Awake()
+    {
         isGameOver = false;
     }
     // Start is called before the first frame update
@@ -41,10 +31,7 @@ public class Snake_Mechanics : MonoBehaviour
         isGameOver = false;
         snakeHead = this.GetComponent<Transform>();
         speed = Mathf.Abs(PlayerPrefs.GetInt("SnakeSpeed") - 4) / 10.0f;
-
         Time.fixedDeltaTime = speed; // 0 is the default frame rendering time and if we increase the time, the time for rendering will increase hence laggy and slow expereience
-
-        bound = grid.bounds;
 
         snakeBody.Add(snakeHead);
 
@@ -106,13 +93,9 @@ public class Snake_Mechanics : MonoBehaviour
             snakeBody.Clear();
             snakeBody.Add(snakeHead);
             isGameOver = true;
-            gameplayUIRef.GameoverPanel();
         }
         if (other.tag == "Food")
         {
-            ++score;
-            gameplayUIRef.UpdateScore(score);
-            RandomizeFood();
             GrowSnake();
         }
         if (other.tag == "Portal")
@@ -125,18 +108,6 @@ public class Snake_Mechanics : MonoBehaviour
         }
     }
 
-    private void RandomizeFood()
-    {
-        float x = Mathf.Round(Random.Range(bound.min.x, bound.max.x)); // round to perfectly align with snake axes
-        float y = Mathf.Round(Random.Range(bound.min.y, bound.max.y));
-
-        x -= 0.5f;
-        y += 0.5f;
-
-        foodBlack.position = new Vector2(x, y);
-        foodWhite.position = new Vector2(x, y);
-    }
-
     private void GrowSnake()
     {
         // Instantiate food prefab, attach it to snake list and move it along the snake
@@ -145,8 +116,4 @@ public class Snake_Mechanics : MonoBehaviour
         snakeBody.Add(temp);
 
     }
-
-
-
-    // food prefab is tagged as obstacle because we'll be adding a prefab to snake body which will be obstacle for snake itself, and we've just one food instance tagged food, which we'll use as actuall prefab
 }
