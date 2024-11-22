@@ -756,7 +756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f33281e0ca1acf841b856e96e40fd0ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.03
+  speed: 0.1
   grid: {fileID: 1234719077}
   bound:
     m_Center: {x: 0, y: 0, z: 0}

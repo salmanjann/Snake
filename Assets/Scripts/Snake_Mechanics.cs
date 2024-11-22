@@ -11,13 +11,19 @@ using UnityEngine.UIElements;
 // 
 public class Snake_Mechanics : MonoBehaviour
 {
-    private Transform snakeHead;
+    public Transform snakeHead;
     private Vector2 direction = Vector2.right; // (0,1)
     public float speed = 0.1f;
     public Collider2D grid;
     public Bounds bound;// store the area between collider
 
     public Transform food;
+
+    public Transform portal1;
+    public Transform portal2;
+
+    public Transform obstacle1;
+    public Transform obstacle2;
 
     private List<Transform> snakeBody = new List<Transform>();
     public Transform snakeBodyPart;
@@ -45,6 +51,15 @@ public class Snake_Mechanics : MonoBehaviour
         {
             GrowSnake();
         }
+
+        RandomizeFood();
+        RandomizePortal1();
+        RandomizePortal2();
+        RandomizeObstacle1();
+        RandomizeObstacle2();
+
+        InvokeRepeating("RandomizePortal1", 10f, 10f);
+        InvokeRepeating("RandomizePortal2", 10f, 10f);
     }
 
     // Update is called once per frame
@@ -101,6 +116,14 @@ public class Snake_Mechanics : MonoBehaviour
             RandomizeFood();
             GrowSnake();
         }
+        if (other.tag == "Portal")
+        {
+            Teleport();
+        }
+        if (other.tag == "Portal2")
+        {
+            Teleport2();
+        }
     }
 
     private void RandomizeFood()
@@ -109,6 +132,48 @@ public class Snake_Mechanics : MonoBehaviour
         float y = Mathf.Round(Random.Range(bound.min.y, bound.max.y));
 
         food.position = new Vector2(x, y);
+    }
+
+    private void RandomizeObstacle1()
+    {
+        float x = Mathf.Round(Random.Range(bound.min.x, bound.max.x)); // round to perfectly align with snake axes
+        float y = Mathf.Round(Random.Range(bound.min.y, bound.max.y));
+
+        obstacle1.position = new Vector2(x, y);
+    }
+
+    private void RandomizeObstacle2()
+    {
+        float x = Mathf.Round(Random.Range(bound.min.x, bound.max.x)); // round to perfectly align with snake axes
+        float y = Mathf.Round(Random.Range(bound.min.y, bound.max.y));
+
+        obstacle2.position = new Vector2(x, y);
+    }
+
+    private void RandomizePortal1()
+    {
+        float x = Mathf.Round(Random.Range(bound.min.x, bound.max.x)); // round to perfectly align with snake axes
+        float y = Mathf.Round(Random.Range(bound.min.y, bound.max.y));
+
+        portal1.position = new Vector2(x, y);
+    }
+
+    private void RandomizePortal2()
+    {
+        float x = Mathf.Round(Random.Range(bound.min.x, bound.max.x)); // round to perfectly align with snake axes
+        float y = Mathf.Round(Random.Range(bound.min.y, bound.max.y));
+
+        portal2.position = new Vector2(x, y);
+    }
+
+    private void Teleport()
+    {
+        snakeHead.position = portal2.position;
+    }
+
+    private void Teleport2()
+    {
+        snakeHead.position = portal1.position;
     }
 
     private void GrowSnake()
@@ -130,7 +195,7 @@ public class Snake_Mechanics : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level2");       
     }
 
     // food prefab is tagged as obstacle because we'll be adding a prefab to snake body which will be obstacle for snake itself, and we've just one food instance tagged food, which we'll use as actuall prefab
